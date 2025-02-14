@@ -10,8 +10,15 @@ import uvicorn
 import os
 
 app = FastAPI()
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, 
-                  allow_methods=["*"], allow_headers=["*"])
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 # Serve static files
 app.mount("/assets", StaticFiles(directory="frontend/dist/assets"), name="static")
@@ -46,5 +53,13 @@ async def recommendation(input: str = Query(...), diet: str = Query(None), cuisi
         return {"recommendations": [], "message": "Error processing recommendation"}
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))  # Default to 8000 if PORT is not set
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    # Get port from environment variable or default to 10000
+    port = int(os.environ.get("PORT", 10000))
+    
+    # Run the app with the specified host and port
+    uvicorn.run(
+        "server:app",
+        host="0.0.0.0",
+        port=port,
+        reload=False  # Disable reload in production
+    )
