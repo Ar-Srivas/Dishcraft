@@ -1,0 +1,743 @@
+:root {
+  /* Core colors */
+  --background-color: #121212;
+  --text-color: #ffffff;
+  --accent-color: #2dd4bf;  /* Teal accent */
+  --accent-hover: #14b8a6;
+  
+  /* UI Elements */
+  --card-bg: #1e1e1e;
+  --border-color: #333;
+  --input-bg: #2c2c2c;
+  --modal-bg: #242424;
+  --overlay-bg: rgba(0, 0, 0, 0.7);
+
+  --primary-bg: #FFEDFA;
+  --accent-pink: #E195AB;
+  --accent-red: #DE3163;
+  --accent-green: #CCDF92;
+  --text-dark: #333;
+  --text-light: #FFEDFA;
+  --card-shadow: rgba(225, 149, 171, 0.2);
+  --input-border: #333;
+  --hover-bg: rgba(225, 149, 171, 0.1);
+  --card-shadow: rgba(222, 49, 99, 0.2);
+
+  /* Core Colors */
+  --deep-red: #B82132;
+  --coral: #D2665A;
+  --peach: #F2B28C;
+  --pale-pink: #F6DED8;
+  
+  /* UI Elements */
+  --background-color: #121212;
+  --text-color: #ffffff;
+  --card-bg: #1e1e1e;
+  --input-border: var(--deep-red);
+  --hover-bg: rgba(184, 33, 50, 0.1);
+  --card-shadow: rgba(210, 102, 90, 0.2);
+}
+
+/* Apply dark mode styles */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  display: flex;  /* Add to existing CSS */
+  .search-mode {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1rem 0;
+  }
+  
+  .mode-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+  }
+  
+  .mode-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+  }
+  
+  .mode-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--secondary-color);
+      transition: .4s;
+      border-radius: 24px;
+  }
+  
+  .mode-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+  }
+  
+  .mode-switch input:checked + .mode-slider {
+      background-color: var(--primary-color);
+  }
+  
+  .mode-switch input:checked + .mode-slider:before {
+      transform: translateX(26px);
+  }
+  
+  .active-mode {
+      color: var(--primary-color);
+      font-weight: bold;
+  }
+  flex-direction: column;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+.cardTitle {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 10px 0 5px 0;
+  text-align: center;
+}
+.navList {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  gap: 15px;
+  margin: 0;
+  padding: 10px 0;
+  background-color: var(--card-background-color);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  width: 100%;
+}
+
+.navItem {
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+
+.navItem a {
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+.navItem:hover {
+  background-color: var(--hover-background-color);
+}
+
+.main-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--background-color);
+  padding: 20px;
+  text-align: center;
+}
+
+.input-box {
+  display: flex;
+  width: 100%;
+  max-width: 800px; /* Increased max-width for a longer input box */
+  height: 50px; /* Increased height for a bigger input box */
+  border-radius: 30px;
+  border: 2px solid var(--input-border);
+  padding: 10px 20px;
+  font-size: 20px;
+  outline: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 20px; /* Add some space below the search box */
+  background-color: var(--card-bg);
+}
+
+.input-box:focus-within {
+  border-color: var(--coral);
+  box-shadow: 0 0 0 2px var(--card-shadow);
+}
+
+.input-box input[type="text"] {
+  flex: 1;
+  width: 100%; /* Ensure the input takes the full width of the input box */
+  border: none;
+  outline: none;
+  height: 100%; /* Ensure the input takes the full height of the input box */
+  border-radius: 30px;
+  font-size: 16px;
+  padding: 10px;
+  box-sizing: border-box; /* Ensure padding is included in the width */
+  background-color: var(--input-background-color);
+  color: var(--text-color);
+}
+
+.input-box input[type="text"]::placeholder {
+  color: #b0b0b0;
+}
+
+.input-box button {
+  background: var(--deep-red);
+  color: var(--pale-pink);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.input-box button:hover {
+  background: var(--coral);
+  box-shadow: 0 2px 8px var(--card-shadow);
+}
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.card {
+  width: 280px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--coral);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  background-color: var(--card-bg);
+  box-shadow: 0 4px 12px var(--card-shadow);
+  transition: transform 0.2s ease;
+  color: var(--text-color);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(225, 149, 171, 0.3);
+  border-color: var(--deep-red);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 15px auto;
+}
+
+.card h3 {
+  margin: 8px 0;
+  font-size: 18px;
+  line-height: 1.4;
+  /* Allow text to wrap but limit to 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card p {
+  margin: 4px 0;
+  color: var(--text-color);
+  /* Allow text to wrap naturally */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.card .cardImg {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: 5px 0;
+  object-fit: cover; /* Ensure the image covers the area without distortion */
+}
+
+.card .cardTitle {
+  font-size: 1.2em; /* Reduced font size */
+  font-weight: bold;
+  margin: 10px 0 5px 0; /* Adjusted margin to reduce space */
+}
+
+.footer-legal {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--card-background-color);
+  color: var(--text-color);
+  text-align: center;
+  padding: 10px 0;
+}
+.filters-container {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.filter {
+  min-width: 150px;
+}
+
+.filter-trigger {
+  background-color: var(--input-background-color);
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--input-border-color);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.filter-trigger:hover {
+  background-color: var(--hover-background-color);
+}
+
+.dropdown-container {
+  margin: 10px;
+}
+
+.dropdown {
+  padding: 8px 12px;
+  border: 1px solid var(--coral);
+  border-radius: 8px;
+  background-color: var(--card-bg);
+  color: var(--pale-pink);
+  min-width: 150px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23D2665A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  padding-right: 32px;
+}
+
+.dropdown:hover {
+  border-color: var(--deep-red);
+  box-shadow: 0 0 0 1px var(--card-shadow);
+}
+
+.dropdown:focus {
+  outline: none;
+  border-color: var(--deep-red);
+  box-shadow: 0 0 0 2px var(--card-shadow);
+}
+
+.dropdown option {
+  background-color: var(--card-bg);
+  color: var(--pale-pink);
+  padding: 8px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--modal-overlay);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: var(--modal-bg);
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  color: var(--modal-text);
+  border: 1px solid var(--modal-border);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content {
+  background: var(--modal-bg);
+  border-radius: 12px;
+  border: 1px solid var(--coral);
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--modal-close);
+}
+
+.card-detail {
+  padding: 20px;
+}
+
+.card-detail img {
+  width: 200px;
+  height: 200px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin: 10px auto;
+  display: block;
+}
+
+.card-detail h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--text-color);
+}
+
+.card-detail p {
+  margin: 10px 0;
+}
+
+.card-detail ul {
+  list-style-position: inside;
+  padding-left: 0;
+}
+
+.card-detail li {
+  margin: 10px 0;
+  text-align: left;
+}
+
+.card-detail .modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-color);
+  z-index: 1001;
+}
+
+.card-detail .modal-close:hover {
+  color: #ff4444;
+}
+
+.recipe-detail {
+  padding: 20px;
+}
+
+.recipe-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.recipe-image {
+  max-width: 300px;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border: 2px solid var(--modal-border);
+}
+
+.recipe-info {
+  background: var(--modal-info-bg);
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+  border: 1px solid var(--modal-border);
+}
+
+.recipe-instructions {
+  margin-top: 20px;
+}
+
+.steps-list {
+  margin-top: 15px;
+}
+
+.step-item {
+  display: flex;
+  margin-bottom: 15px;
+  line-height: 1.5;
+  border-bottom: 1px solid var(--modal-border);
+  padding-bottom: 10px;
+}
+
+.step-number {
+  min-width: 30px;
+  font-weight: bold;
+  color: var(--coral);
+}
+
+.step-text {
+  flex: 1;
+}
+
+.recipe-info p strong {
+  color: var(--peach);
+}
+
+.recipe-detail h2,
+.recipe-detail h3 {
+  color: var(--modal-text);
+}
+
+/* Search Mode Toggle Styles */
+.search-mode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin: 2rem auto;
+  width: max-content;
+}
+
+.search-mode {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1rem;
+  background: var(--card-bg);
+  padding: 0.75rem;
+  border-radius: 12px;
+  border: 1px solid var(--coral);
+}
+
+.search-mode span {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  color: var(--text-color);
+}
+
+.search-mode span:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background: var(--primary-color);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.search-mode .active-mode {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.search-mode .active-mode:after {
+  transform: scaleX(1);
+}
+
+/* Remove old toggle styles */
+.mode-switch {
+  display: none;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--accent-pink);
+}
+
+.titleName {
+    font-size: 2.5rem;
+    color: var(--peach);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.search-mode {
+    display: flex;
+    gap: 30px;
+    padding: 10px 20px;
+    background: var(--secondary-bg);
+    border-radius: 30px;
+}
+
+.toggle-option {
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    user-select: none;
+    position: relative;
+}
+
+.toggle-option {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  color: var(--pale-pink);
+}
+
+.toggle-option:hover {
+    color: var(--peach);
+}
+
+.toggle-option:hover {
+  background: var(--hover-bg);
+}
+
+.active-mode {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.active-mode {
+  background: var(--deep-red);
+  color: var(--pale-pink);
+}
+
+/* Remove after pseudo-element - using background instead */
+.active-mode::after {
+  display: none;
+}
+
+.active-mode::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--accent-color, #ff6b6b);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: scaleX(0);
+    }
+    to {
+        transform: scaleX(1);
+    }
+}
+
+button {
+  background: var(--accent-color);
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background: var(--accent-hover);
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+}
+
+.favorite-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 4px;
+  transition: transform 0.2s;
+}
+
+.favorite-btn:hover {
+  transform: scale(1.2);
+}
+
+.rating {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  cursor: pointer;
+  color: var(--card-bg);
+  transition: color 0.2s;
+}
+
+.star:hover,
+.star.active {
+  color: var(--deep-red);
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.theme-toggle:hover {
+  transform: rotate(45deg);
+}
+
+.favorites-btn {
+  position: absolute;
+  right: 2rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  color: var(--pale-pink);
+  background: var(--deep-red);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.favorites-btn:hover {
+  background: var(--coral);
+  transform: translateY(-2px);
+}
+
+.favorites-page {
+  padding: 2rem;
+}
+
+.favorites-page h1 {
+  color: var(--peach);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.favorites-page .cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
