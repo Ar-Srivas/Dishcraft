@@ -24,7 +24,7 @@ nltk.download('vader_lexicon')
 sia = SentimentIntensityAnalyzer()
 
 # Load the dataset
-df = pd.read_csv(r'C:\Users\Administrator\Documents\Projects\DishCraft\DishCraft\backend\data\balanced_reference_data.csv', encoding='latin-1')
+df = pd.read_csv(r'backend\data\reference_data.csv', encoding='latin-1')
 
 # Log unique values in the diet column
 logging.info(f"Unique diet values: {df['diet'].unique()}")

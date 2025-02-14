@@ -7,8 +7,8 @@ import logging
 
 class DataService:
     def __init__(self):
-        self.df = pd.read_csv(r'C:\Users\Administrator\Documents\Projects\DishCraft\DishCraft\backend\data\updated_data.csv', encoding='latin-1')
-        self.embeddings_path = r'C:\Users\Administrator\Documents\Projects\DishCraft\DishCraft\backend\data\embeddings.pkl'
+        self.df = pd.read_csv(r'backend\data\reference_data.csv', encoding='latin-1')
+        self.embeddings_path = r'backend\data\embeddings.pkl'
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
         self.preprocess_data()
         self.embeddings = self.load_or_create_embeddings()

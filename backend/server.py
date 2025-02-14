@@ -5,6 +5,8 @@ from mlpro.vector_search import VectorSearch
 from mlpro.llm_classifier import LLMClassifier
 from mlpro.recommender import recommend_dish, mood_mapping
 import logging
+import uvicorn
+import os
 
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, 
@@ -38,3 +40,7 @@ async def recommendation(input: str = Query(...), diet: str = Query(None), cuisi
     except Exception as e:
         logging.error(f"Recommendation error: {e}")
         return {"recommendations": [], "message": "Error processing recommendation"}
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))  # Default to 8000 if PORT is not set
+    uvicorn.run(app, host="0.0.0.0", port=port)
