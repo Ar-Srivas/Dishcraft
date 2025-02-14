@@ -29,7 +29,7 @@ function App() {
     "Vegan",
     "Sugar Free Diet"
   ].filter(Boolean);
-
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
   const handleSearch = (input) => {
     const endpoint = searchType ? 'recommendation' : 'search';
     setMessage('Searching...');
@@ -39,7 +39,7 @@ function App() {
     if (dietFilter) params.append('diet', dietFilter);
     if (cuisineFilter) params.append('cuisine', cuisineFilter);
     
-    fetch(`http://127.0.0.1:8000/${endpoint}?${params}`)
+    fetch(`${API_BASE_URL}/${endpoint}?${params}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
