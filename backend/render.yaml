@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: dishcraft-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn server:app -k uvicorn.workers.UvicornWorker -b 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0

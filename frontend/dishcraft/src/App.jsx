@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import Dropdown from './components/Dropdown';
 import Search from './components/Search';
 import Card from './components/Card';
@@ -74,7 +74,7 @@ function App() {
   };
 
   return (
-    <Router>
+    <HashRouter>
       <Header searchType={searchType} onToggleSearch={setSearchType} />
       <div className="main-container">
         <Routes>
@@ -149,7 +149,7 @@ function App() {
         onClose={closeModal}
         dish={selectedDish}
       />
-    </Router>
+    </HashRouter>
   );
 }
 

@@ -8,13 +8,18 @@ from mlpro.recommender import recommend_dish, mood_mapping
 import logging
 import uvicorn
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 app = FastAPI()
 
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://dishcraft.vercel.app",
+        "http://localhost:3000"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
@@ -53,8 +58,8 @@ async def recommendation(input: str = Query(...), diet: str = Query(None), cuisi
         return {"recommendations": [], "message": "Error processing recommendation"}
 
 if __name__ == "__main__":
-    # Get port from environment variable or default to 10000
-    port = int(os.environ.get("PORT", 10000))
+    # Get port from environment variable or default to 8000
+    port = int(os.environ.get("PORT", 8000))
     
     # Run the app with the specified host and port
     uvicorn.run(
