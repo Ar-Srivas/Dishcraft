@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/Dishcraft/',
+  base: '/', // Set this to '/' if deploying at the root
   build: {
     outDir: 'dist',
   }

@@ -7,8 +7,13 @@ import logging
 
 class DataService:
     def __init__(self):
-        self.df = pd.read_csv(r'backend\data\reference_data.csv', encoding='latin-1')
-        self.embeddings_path = r'backend\data\embeddings.pkl'
+        # Use relative paths to access the data file
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        data_path = os.path.join(base_dir, '..', 'data', 'reference_data.csv')
+        embeddings_path = os.path.join(base_dir, '..', 'data', 'embeddings.pkl')
+        
+        self.df = pd.read_csv(data_path, encoding='latin-1')
+        self.embeddings_path = embeddings_path
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
         self.preprocess_data()
         self.embeddings = self.load_or_create_embeddings()

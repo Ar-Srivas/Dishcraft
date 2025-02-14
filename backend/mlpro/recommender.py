@@ -23,8 +23,13 @@ nltk.download('vader_lexicon')
 # Initialize SentimentIntensityAnalyzer
 sia = SentimentIntensityAnalyzer()
 
+# Use relative paths to access the data file
+base_dir = os.path.dirname(os.path.abspath(__file__))
+data_path = os.path.join(base_dir, '..', 'data', 'reference_data.csv')
+model_path = os.path.join(base_dir, '..', 'data', 'model.pkl')
+
 # Load the dataset
-df = pd.read_csv(r'backend\data\reference_data.csv', encoding='latin-1')
+df = pd.read_csv(data_path, encoding='latin-1')
 
 # Log unique values in the diet column
 logging.info(f"Unique diet values: {df['diet'].unique()}")
@@ -100,8 +105,6 @@ df['course_encoded'] = le_course.fit_transform(df['course'])
 # Split the data
 X = df[['course_encoded', 'cuisine_encoded']]
 y = df['mood_encoded']
-
-model_path = 'model.pkl'
 
 if not os.path.exists(model_path):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)

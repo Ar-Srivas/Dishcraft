@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from mlpro.data_service import data_service
 from mlpro.vector_search import VectorSearch
 from mlpro.llm_classifier import LLMClassifier
@@ -11,6 +12,9 @@ import os
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, 
                   allow_methods=["*"], allow_headers=["*"])
+
+# Serve static files
+app.mount("/assets", StaticFiles(directory="frontend/dist/assets"), name="static")
 
 vector_search = VectorSearch(data_service.df, data_service.embeddings)
 llm_classifier = LLMClassifier(mood_mapping)
