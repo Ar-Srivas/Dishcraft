@@ -25,7 +25,7 @@ sia = SentimentIntensityAnalyzer()
 
 # Use relative paths to access the data file
 base_dir = os.path.dirname(os.path.abspath(__file__))
-data_path = os.path.join(base_dir, '..', 'data', 'reference_data.csv')
+data_path = os.path.join(base_dir, '..', 'data', 'balanced_reference_data.csv')
 model_path = os.path.join(base_dir, '..', 'data', 'model.pkl')
 
 # Load the dataset

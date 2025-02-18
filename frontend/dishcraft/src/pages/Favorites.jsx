@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Card from '../components/Card';
-
+import Modal from '../components/Modal';
 function Favorites() {
     const [favorites, setFavorites] = useState([]);
     const [selectedDish, setSelectedDish] = useState(null);

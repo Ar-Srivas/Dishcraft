@@ -5,19 +5,8 @@ export default defineConfig({
   plugins: [react()],
   build: {
     outDir: 'dist',
-    sourcemap: true,
-    rollupOptions: {
-      output: {
-        manualChunks: undefined,
-      }
-    }
+    assetsDir: 'assets',
+    sourcemap: true
   },
-  server: {
-    port: 3000
-  },
-  resolve: {
-    alias: {
-      '/assets': '/src/assets'
-    }
-  }
+  base: './'
 })
