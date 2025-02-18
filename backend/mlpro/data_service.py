@@ -20,16 +20,16 @@ class DataService:
             return
         
         self.initialized = True
-        # Get the absolute path to the data directory
+        # Get the path to backend root
         current_dir = Path(os.path.dirname(os.path.abspath(__file__)))
-        self.data_dir = current_dir.parent.parent / 'data'
+        self.root_dir = current_dir.parent
         
-        logger.info(f"Looking for data in: {self.data_dir}")
+        logger.info(f"Looking for data in: {self.root_dir}")
         
         try:
-            # Load CSV data
+            # Load CSV data from root
             self.df = pd.read_csv(
-                self.data_dir / 'balanced_reference_data.csv',
+                self.root_dir / 'balanced_reference_data.csv',
                 encoding='latin-1',
                 usecols=['name', 'course', 'cuisine', 'diet', 'image_url'],
                 dtype={
@@ -42,17 +42,13 @@ class DataService:
             )
             logger.info("CSV data loaded successfully")
             
-            # Load embeddings from pickle file
-            embeddings_path = self.data_dir / 'embeddings.pkl'
-            logger.info(f"Loading embeddings from: {embeddings_path}")
-            with open(embeddings_path, 'rb') as f:
+            # Load embeddings from root
+            with open(self.root_dir / 'embeddings.pkl', 'rb') as f:
                 self.embeddings = pickle.load(f)
             logger.info("Embeddings loaded successfully")
             
-            # Load model from pickle file
-            model_path = self.data_dir / 'model.pkl'
-            logger.info(f"Loading model from: {model_path}")
-            with open(model_path, 'rb') as f:
+            # Load model from root
+            with open(self.root_dir / 'model.pkl', 'rb') as f:
                 self.model = pickle.load(f)
             logger.info("Model loaded successfully")
             
