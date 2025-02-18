@@ -38,3 +38,9 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+# .gitignore
+*.pyc
+__pycache__/
+.env
+!data/balanced_reference_data.csv
+!data/embeddings.npz

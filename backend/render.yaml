@@ -2,8 +2,19 @@ services:
   - type: web
     name: dishcraft-api
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn server:app -k uvicorn.workers.UvicornWorker -b 0.0.0.0:$PORT
+    buildCommand: |
+      pip install -r requirements.txt
+      python -c "import nltk; nltk.download('punkt'); nltk.download('vader_lexicon')"
+    startCommand: gunicorn server:app -k uvicorn.workers.UvicornWorker -w 1 --timeout 120 -b 0.0.0.0:$PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
+      - key: PORT
+        value: 10000
+    scaling:
+      minInstances: 1
+      maxInstances: 1
+    resources:
+      cpu: 1x
+      memory: 512MB
+      storage: 512MB
