@@ -1,5 +1,6 @@
 import numpy as np 
 import pandas as pd 
+from pathlib import Path
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
@@ -14,7 +15,14 @@ import logging
 from mlpro.llm_classifier import LLMClassifier
 from typing import List, Dict
 
+# Setup paths
+current_dir = Path(__file__).resolve().parent
+root_dir = current_dir.parent
+data_path = root_dir / 'balanced_reference_data.csv'
+model_path = root_dir / 'model.pkl'
+
 logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Download necessary NLTK data
 nltk.download('punkt')
@@ -23,105 +31,112 @@ nltk.download('vader_lexicon')
 # Initialize SentimentIntensityAnalyzer
 sia = SentimentIntensityAnalyzer()
 
-# Use relative paths to access the data file
-base_dir = os.path.dirname(os.path.abspath(__file__))
-data_path = os.path.join(base_dir, '..', 'data', 'balanced_reference_data.csv')
-model_path = os.path.join(base_dir, '..', 'data', 'model.pkl')
+try:
+    # Load the dataset from backend root
+    if not data_path.exists():
+        raise FileNotFoundError(f"Data file not found at {data_path}")
+    df = pd.read_csv(data_path, encoding='latin-1')
+    logger.info("Dataset loaded successfully")
 
-# Load the dataset
-df = pd.read_csv(data_path, encoding='latin-1')
+    # Log unique values in the diet column
+    logging.info(f"Unique diet values: {df['diet'].unique()}")
 
-# Log unique values in the diet column
-logging.info(f"Unique diet values: {df['diet'].unique()}")
+    # Preprocess the data
+    df['course'] = df['course'].str.replace(' ', '').str.lower()
+    df['cuisine'] = df['cuisine'].str.replace(' ', '').str.lower()
 
-# Preprocess the data
-df['course'] = df['course'].str.replace(' ', '').str.lower()
-df['cuisine'] = df['cuisine'].str.replace(' ', '').str.lower()
-
-# Define mood mapping
-mood_mapping = {
-    "happy": {
-        "courses": ["Dessert", "Snack", "Appetizer", "South Indian Breakfast", "North Indian Breakfast", "World Breakfast"],
-        "cuisines": ["south indian recipes", "north indian recipes", "bengali recipes", "punjabi", "mangalorean", "gujarati recipesï»¿"],
-        "diet": None
-    },
-    "stressed": {
-        "courses": ["Dinner", "Main Course", "Side Dish"],
-        "cuisines": ["mughlai", "kashmiri", "rajasthani", "chettinad", "lucknowi", "hyderabadi", "andhra"],
-        "diet": None
-    },
-    "tired": {
-        "courses": ["Snack", "Lunch", "One Pot Dish"],
-        "cuisines": ["indo chinese", "sichuan", "chinese", "thai", "malvani", "tamil nadu"],
-        "diet": ["vegetarian", "vegan"]
-    },
-    "adventurous": {
-        "courses": ["South Indian Breakfast", "World Breakfast", "One Pot Dish"],
-        "cuisines": ["nepalese", "fusion", "sri lankan", "nagaland", "afghan", "coastal karnataka", "middle eastern"],
-        "diet": None
-    },
-    "relaxed": {
-        "courses": ["Brunch", "Lunch", "Dinner", "Side Dish"],
-        "cuisines": ["continental", "malabar", "udupi", "parsi recipes", "north karnataka", "kerala recipes"],
-        "diet": None
-    },
-    "celebratory": {
-        "courses": ["Dessert", "Appetizer", "Dinner", "Main Course"],
-        "cuisines": ["mughlai", "hyderabadi", "awadhi", "punjabi", "indo chinese", "south indian recipes"],
-        "diet": None
-    },
-    "health-conscious": {
-        "courses": ["Lunch", "Dinner", "Side Dish", "Snack"],
-        "cuisines": ["high protein vegetarian", "sugar free diet", "no onion no garlic (sattvic)"],
-        "diet": ["vegetarian", "vegan"]
+    # Define mood mapping
+    mood_mapping = {
+        "happy": {
+            "courses": ["Dessert", "Snack", "Appetizer", "South Indian Breakfast", "North Indian Breakfast", "World Breakfast"],
+            "cuisines": ["south indian recipes", "north indian recipes", "bengali recipes", "punjabi", "mangalorean", "gujarati recipesï»¿"],
+            "diet": None
+        },
+        "stressed": {
+            "courses": ["Dinner", "Main Course", "Side Dish"],
+            "cuisines": ["mughlai", "kashmiri", "rajasthani", "chettinad", "lucknowi", "hyderabadi", "andhra"],
+            "diet": None
+        },
+        "tired": {
+            "courses": ["Snack", "Lunch", "One Pot Dish"],
+            "cuisines": ["indo chinese", "sichuan", "chinese", "thai", "malvani", "tamil nadu"],
+            "diet": ["vegetarian", "vegan"]
+        },
+        "adventurous": {
+            "courses": ["South Indian Breakfast", "World Breakfast", "One Pot Dish"],
+            "cuisines": ["nepalese", "fusion", "sri lankan", "nagaland", "afghan", "coastal karnataka", "middle eastern"],
+            "diet": None
+        },
+        "relaxed": {
+            "courses": ["Brunch", "Lunch", "Dinner", "Side Dish"],
+            "cuisines": ["continental", "malabar", "udupi", "parsi recipes", "north karnataka", "kerala recipes"],
+            "diet": None
+        },
+        "celebratory": {
+            "courses": ["Dessert", "Appetizer", "Dinner", "Main Course"],
+            "cuisines": ["mughlai", "hyderabadi", "awadhi", "punjabi", "indo chinese", "south indian recipes"],
+            "diet": None
+        },
+        "health-conscious": {
+            "courses": ["Lunch", "Dinner", "Side Dish", "Snack"],
+            "cuisines": ["high protein vegetarian", "sugar free diet", "no onion no garlic (sattvic)"],
+            "diet": ["vegetarian", "vegan"]
+        }
     }
-}
 
-llm_classifier = LLMClassifier(mood_mapping)
+    llm_classifier = LLMClassifier(mood_mapping)
 
-def assign_mood(row, mood_mapping):
-    course = str(row['course']).strip().lower()
-    cuisine = str(row['cuisine']).strip().lower()
-    
-    for mood, criteria in mood_mapping.items():
-        courses = [c.lower().strip() for c in criteria.get('courses', [])]
-        cuisines = [c.lower().strip() for c in criteria.get('cuisines', [])]
+    def assign_mood(row, mood_mapping):
+        course = str(row['course']).strip().lower()
+        cuisine = str(row['cuisine']).strip().lower()
         
-        if course in courses or cuisine in cuisines:
-            return mood
-    return "neutral"
+        for mood, criteria in mood_mapping.items():
+            courses = [c.lower().strip() for c in criteria.get('courses', [])]
+            cuisines = [c.lower().strip() for c in criteria.get('cuisines', [])]
+            
+            if course in courses or cuisine in cuisines:
+                return mood
+        return "neutral"
 
-df['mood'] = df.apply(lambda row: assign_mood(row, mood_mapping), axis=1)
+    df['mood'] = df.apply(lambda row: assign_mood(row, mood_mapping), axis=1)
 
-# Encode categorical variables
-le_mood = preprocessing.LabelEncoder()
-le_cuisine = preprocessing.LabelEncoder()
-le_course = preprocessing.LabelEncoder()
+    # Encode categorical variables
+    le_mood = preprocessing.LabelEncoder()
+    le_cuisine = preprocessing.LabelEncoder()
+    le_course = preprocessing.LabelEncoder()
 
-df['mood_encoded'] = le_mood.fit_transform(df['mood'])
-df['cuisine_encoded'] = le_cuisine.fit_transform(df['cuisine'])
-df['course_encoded'] = le_course.fit_transform(df['course'])
+    df['mood_encoded'] = le_mood.fit_transform(df['mood'])
+    df['cuisine_encoded'] = le_cuisine.fit_transform(df['cuisine'])
+    df['course_encoded'] = le_course.fit_transform(df['course'])
 
-# Split the data
-X = df[['course_encoded', 'cuisine_encoded']]
-y = df['mood_encoded']
+    # Split the data
+    X = df[['course_encoded', 'cuisine_encoded']]
+    y = df['mood_encoded']
 
-if not os.path.exists(model_path):
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
-    
-    # Check the number of samples in the minority class
-    min_class_count = y_train.value_counts().min()
-    if min_class_count > 1:
-        smote = SMOTE(random_state=0, k_neighbors=min(min_class_count - 1, 5))
-        X_train_smote, y_train_smote = smote.fit_resample(X_train, y_train)
+    # Load or create model in backend root
+    if not model_path.exists():
+        logger.info("Training new model...")
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+        
+        # Check the number of samples in the minority class
+        min_class_count = y_train.value_counts().min()
+        if min_class_count > 1:
+            smote = SMOTE(random_state=0, k_neighbors=min(min_class_count - 1, 5))
+            X_train_smote, y_train_smote = smote.fit_resample(X_train, y_train)
+        else:
+            X_train_smote, y_train_smote = X_train, y_train
+        
+        model = RandomForestClassifier(random_state=0)
+        model.fit(X_train_smote, y_train_smote)
+        joblib.dump(model, model_path)
+        logger.info(f"Model saved to {model_path}")
     else:
-        X_train_smote, y_train_smote = X_train, y_train
-    
-    model = RandomForestClassifier(random_state=0)
-    model.fit(X_train_smote, y_train_smote)
-    joblib.dump(model, model_path)
-else:
-    model = joblib.load(model_path)
+        model = joblib.load(model_path)
+        logger.info("Loaded existing model")
+
+except Exception as e:
+    logger.error(f"Error in initialization: {e}")
+    raise
 
 def extract_mood(sentence):
     sentiment_scores = sia.polarity_scores(sentence)
