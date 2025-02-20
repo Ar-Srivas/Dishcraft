@@ -1,11 +1,67 @@
-# Recipe Recommendation App
+# DishCraft - Setup Guide
 
-## Overview
-A simple recipe recommendation web app that suggests personalized recipes based on user preferences. Users can create profiles, search for recipes, and save their favorite dishes.
+Instructions to set up and run the backend (FastAPI) and frontend (React with Vite) for DishCraft.
 
-## Features
-- **User Profile Creation**: Users can create and manage profiles, saving their dietary preferences and favorite cuisines.
-- **Recipe Recommendations**: Personalized recipe suggestions based on user preferences like vegetarian, low-carb, etc.
-- **Recipe Search**: Users can search for recipes by ingredients, cuisine, or difficulty level.
-- **Ingredient List & Cooking Instructions**: Detailed ingredients and step-by-step cooking instructions for each recipe.
-- **Rating and Feedback**: Users can rate recipes and leave feedback, which helps improve future recommendations.
+## Prerequisites
+
+Ensure you have the following installed:
+
+- [Python 3.8+](https://www.python.org/downloads/)
+- [Node.js 16+](https://nodejs.org/)
+
+## Backend (FastAPI) Setup
+
+1. **Navigate to the backend directory:**
+   ```sh
+   cd backend
+   ```
+2. **Install dependencies:**
+   ```sh
+   pip install -r requirements.txt
+   ```
+3. **Run the FastAPI server:**
+   ```sh
+   uvicorn server:app --reload
+   ```
+4. **API Documentation:** Open the following URLs in your browser:
+   - Swagger UI: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+   - ReDoc: [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
+
+---
+
+## Frontend (React + Vite) Setup
+
+1. **Navigate to the frontend directory:**
+   ```sh
+   cd frontend/dishcraft
+   ```
+2. **Install dependencies:**
+   ```sh
+   npm install
+   ```
+3. **Run the frontend development server:**
+   ```sh
+   npm run dev
+   ```
+4. **Access the app:** Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+---
+
+## Running the Full Stack Application
+
+To run both the backend and frontend simultaneously:
+
+1. **Open two terminal windows**
+2. **Run the backend server:**
+   ```sh
+   cd backend
+   uvicorn server:app --reload
+   ```
+3. **Run the frontend server:**
+   ```sh
+   cd frontend/dishcraft
+   npm run dev
+   ```
+
+Now, your DishCraft app should be fully functional! 🚀
+

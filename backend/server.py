@@ -21,9 +21,9 @@ app = FastAPI()
 # Configure CORS with specific origin
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://dishcraftfrontend.vercel.app"],
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["GET"],
+    allow_methods=["*"],
     allow_headers=["*"]
 )
 
